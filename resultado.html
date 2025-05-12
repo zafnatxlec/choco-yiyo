@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tu Chocolate</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .resultado {
+      margin: 2rem auto;
+      padding: 1.5rem;
+      max-width: 500px;
+      background: #fff5ec;
+      border: 2px solid #d2691e;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .resultado span {
+      display: inline-block;
+      margin: 0.3rem;
+      padding: 0.4rem 0.8rem;
+      background-color: #f3d3b1;
+      border-radius: 5px;
+    }
+
+    .color-box {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 1px solid #000;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 2rem;
+      color: #8b4513;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🍫 Tu Chocolate Personalizado</h1>
+  </header>
+
+  <main>
+    <div class="resultado" id="resultado">
+      <p>Cargando tu chocolate...</p>
+    </div>
+    <a href="personalizar.html">← Personalizar otro</a>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Choco Yiyi</p>
+  </footer>
+
+  <script>
+    const resultado = document.getElementById('resultado');
+    const chocolate = JSON.parse(localStorage.getItem('miChocolate'));
+
+    if (chocolate) {
+      resultado.innerHTML = `
+        <h3>✨ Aquí está tu creación:</h3>
+        <p><strong>Cantidad:</strong> ${chocolate.cantidad} chocolate(s)</p>
+        <p><strong>Forma:</strong> ${chocolate.forma}</p>
+        <p><strong>Color:</strong> ${chocolate.color} <span class="color-box" style="background:${chocolate.color};"></span></p>
+        <p><strong>Toppings:</strong> ${chocolate.toppings.length > 0 ? chocolate.toppings.map(t => `<span>${t}</span>`).join('') : 'Ninguno'}</p>
+      `;
+    } else {
+      resultado.innerHTML = `
+        <p>No se encontró ninguna personalización.</p>
+        <a href="personalizar.html">Volver a personalizar</a>
+      `;
+    }
+  </script>
+</body>
+</html>
