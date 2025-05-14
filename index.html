@@ -3,25 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Choco Yiyi - Crea tu chocolate</title>
+  <title>Choco Yiyi - Bienvenido</title>
+  <link rel="icon" href="img/Logo.png" type="image/png">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    header {
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    header img.logo {
+      height: 120px;
+      margin-bottom: 10px;
+      transform: scale(0.8);
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>🍫 Choco Yiyi</h1>
-    <p>¡Crea tu chocolate personalizado como a ti te gusta!</p>
-    <button onclick="window.location.href='personalizar.html'">Crear tu chocolate</button>
+    <img src="img/Logo.png" alt="Logo Choco Yiyi" class="logo">
+    <h1>Choco Yiyi</h1>
+    <p>¡Elige tu dulce favorito y personalízalo a tu gusto!</p>
   </header>
 
-  <section class="galeria">
-    <h2>Modelos base</h2>
-    <div class="modelos">
-      <div class="modelo"><img src="modelo1.png" alt="Modelo 1"><p>Modelo 1</p></div>
-      <div class="modelo"><img src="modelo2.png" alt="Modelo 2"><p>Modelo 2</p></div>
-      <div class="modelo"><img src="modelo3.png" alt="Modelo 3"><p>Modelo 3</p></div>
-      <div class="modelo"><img src="modelo4.png" alt="Modelo 4"><p>Modelo 4</p></div>
-    </div>
-  </section>
+  <main class="contenedor-principal">
+    <section class="productos">
+      <h2>Productos disponibles</h2>
+      <div class="tarjetas-productos">
+        <div class="producto">
+          <img src="img/corazon-rojo.png" alt="Chocolate personalizado">
+          <h3>Chocolates</h3>
+          <p>Personaliza corazones o ositos en varios colores.</p>
+          <button onclick="window.location.href='personalizar.html?producto=chocolate'">Personalizar</button>
+        </div>
+        <div class="producto">
+          <img src="img/donita.png" alt="Donita">
+          <h3>Donitas</h3>
+          <p>Elige tu donita favorita y dale tu toque especial.</p>
+          <button onclick="window.location.href='personalizar.html?producto=donita'">Personalizar</button>
+        </div>
+        <div class="producto">
+          <img src="img/oreo.png" alt="Choco Oreo">
+          <h3>Choco Oreo</h3>
+          <p>Chocolate relleno con Oreo, ¡una delicia crujiente!</p>
+          <button onclick="window.location.href='personalizar.html?producto=oreo'">Personalizar</button>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <footer>
     <p>&copy; 2025 Choco Yiyi</p>

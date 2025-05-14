@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tu Chocolate</title>
+  <title>Tu Pedido</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="img/Logo.png" type="image/png">
   <style>
     .resultado {
       margin: 2rem auto;
@@ -31,27 +32,46 @@
       border: 1px solid #000;
       vertical-align: middle;
       margin-left: 5px;
+      border-radius: 50%;
+    }
+
+    .preview {
+      width: 150px;
+      margin-bottom: 1rem;
+    }
+
+    .whatsapp {
+      margin-top: 1.5rem;
+      display: inline-block;
+      background: #25d366;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    header, footer {
+      text-align: center;
+      margin: 1rem 0;
     }
 
     a {
-      display: inline-block;
-      margin-top: 2rem;
-      color: #8b4513;
+      color: #d2691e;
       text-decoration: none;
-      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>🍫 Tu Chocolate Personalizado</h1>
+    <h1>Tu Pedido Personalizado</h1>
   </header>
 
   <main>
     <div class="resultado" id="resultado">
-      <p>Cargando tu chocolate...</p>
+      <p>Cargando tu pedido...</p>
     </div>
-    <a href="personalizar.html">← Personalizar otro</a>
+    <p><a href="index.html">← Personalizar otro producto</a></p>
   </main>
 
   <footer>
@@ -60,16 +80,50 @@
 
   <script>
     const resultado = document.getElementById('resultado');
-    const chocolate = JSON.parse(localStorage.getItem('miChocolate'));
+    const datos = JSON.parse(localStorage.getItem('miChocolate'));
 
-    if (chocolate) {
-      resultado.innerHTML = `
-        <h3>✨ Aquí está tu creación:</h3>
-        <p><strong>Cantidad:</strong> ${chocolate.cantidad} chocolate(s)</p>
-        <p><strong>Forma:</strong> ${chocolate.forma}</p>
-        <p><strong>Color:</strong> ${chocolate.color} <span class="color-box" style="background:${chocolate.color};"></span></p>
-        <p><strong>Toppings:</strong> ${chocolate.toppings.length > 0 ? chocolate.toppings.map(t => `<span>${t}</span>`).join('') : 'Ninguno'}</p>
-      `;
+    if (datos) {
+      let imagenSrc = "img/";
+
+      if (datos.producto === "chocolate") {
+        imagenSrc += `${datos.forma.toLowerCase()}-${datos.color.toLowerCase()}.png`;
+      } else if (datos.producto === "donita") {
+        imagenSrc += "donita.png";
+      } else if (datos.producto === "oreo") {
+        imagenSrc += "oreo.png";
+      }
+
+      console.log("Ruta de la imagen:", imagenSrc);  // Verifica la ruta
+
+      const colorCss = {
+        "Rojo": "red",
+        "Café": "saddlebrown",
+        "Rosado": "pink",
+        "Azul": "blue",
+        "Blanco": "white"
+      }[datos.color] || datos.color.toLowerCase();
+
+      let html = `<img src="${imagenSrc}" alt="Vista previa" class="preview">`;
+      html += `<h3>✨ Aquí está tu creación:</h3>`;
+      html += `<p><strong>Producto:</strong> ${datos.producto}</p>`;
+      html += `<p><strong>Cantidad:</strong> ${datos.cantidad}</p>`;
+      html += `<p><strong>Color:</strong> ${datos.color} <span class="color-box" style="background:${colorCss}"></span></p>`;
+
+      if (datos.producto === "chocolate") {
+        html += `<p><strong>Forma:</strong> ${datos.forma}</p>`;
+        html += `<p><strong>Toppings:</strong> ${
+          datos.toppings && datos.toppings.length > 0
+            ? datos.toppings.map(t => `<span>${t}</span>`).join('')
+            : 'Ninguno'
+        }</p>`;
+      }
+
+      const mensaje = encodeURIComponent(`🍫 Dulce personalizado:\nProducto: ${datos.producto}\nCantidad: ${datos.cantidad}\nColor: ${datos.color}${datos.forma ? `\nForma: ${datos.forma}` : ''}${datos.toppings && datos.toppings.length > 0 ? `\nToppings: ${datos.toppings.join(', ')}` : ''}`);
+      const linkWhatsApp = `https://wa.me/573173584005?text=${mensaje}`;
+
+      html += `<a class="whatsapp" href="${linkWhatsApp}" target="_blank">Enviar por WhatsApp</a>`;
+
+      resultado.innerHTML = html;
     } else {
       resultado.innerHTML = `
         <p>No se encontró ninguna personalización.</p>

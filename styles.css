@@ -1,8 +1,8 @@
 /* Diseño general */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #f5f5f5; /* Fondo suave y claro */
-  color: #4a4a4a; /* Texto en un gris oscuro */
+  background-color: #f5f5f5;
+  color: #4a4a4a;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -11,10 +11,10 @@ body {
 
 /* Cabecera */
 header {
-  background-color: #8b4513; /* Color cálido de fondo */
+  background-color: #8b4513;
   color: white;
   padding: 2rem;
-  border-bottom: 5px solid #d2691e; /* Borde para darle un toque más elegante */
+  border-bottom: 5px solid #d2691e;
 }
 
 header h1 {
@@ -27,6 +27,7 @@ header p {
   margin-top: 0.5rem;
 }
 
+/* Botones generales */
 button {
   padding: 12px 24px;
   background-color: #d2691e;
@@ -47,6 +48,68 @@ button:focus {
   outline: none;
 }
 
+/* Enlaces */
+a {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #8b4513;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #a0522d;
+}
+
+/* Página de productos */
+.productos h2 {
+  color: #8b4513;
+  font-size: 2rem;
+  margin: 2rem 0 1rem;
+}
+
+.tarjetas-productos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.producto {
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  width: 250px;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.producto:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.producto img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.producto h3 {
+  color: #8b4513;
+  margin-top: 1rem;
+}
+
+.producto p {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0.5rem 0;
+}
+
 /* Formulario de personalización */
 form {
   background-color: #fff;
@@ -64,9 +127,11 @@ form div {
 
 label {
   font-weight: bold;
+  display: block;
+  margin-bottom: 0.3rem;
 }
 
-select, input[type="color"] {
+select, input[type="color"], input[type="number"] {
   width: 100%;
   padding: 10px;
   font-size: 1rem;
@@ -80,35 +145,36 @@ input[type="checkbox"] {
   margin-right: 0.5rem;
 }
 
-button {
-  padding: 12px 24px;
-  background-color: #8b4513;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #a0522d;
-}
-
-a {
-  display: inline-block;
-  margin-top: 1rem;
-  color: #8b4513;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease;
-}
-
-a:hover {
-  color: #a0522d;
-}
-
-/* Resultados */
+/* Resultado */
 .resultado {
   background-color: #fff8e1;
-  border: 2px solid #d2691e
+  border: 2px solid #d2691e;
+  border-radius: 10px;
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.resultado h3 {
+  color: #8b4513;
+  margin-bottom: 1rem;
+}
+
+.resultado span {
+  display: inline-block;
+  margin: 0.3rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #f3d3b1;
+  border-radius: 5px;
+}
+
+.color-box {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+  vertical-align: middle;
+  margin-left: 5px;
+  border-radius: 50%;
+}

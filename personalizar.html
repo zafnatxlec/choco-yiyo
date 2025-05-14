@@ -3,98 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Personaliza tu chocolate</title>
+  <title>Personaliza tu producto</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fff8f0;
-      text-align: center;
-      padding: 2rem;
-    }
-
-    form {
-      background: #ffffff;
-      padding: 2rem;
-      border: 2px solid #d2691e;
-      border-radius: 10px;
-      display: inline-block;
-      max-width: 500px;
-    }
-
-    form div {
-      margin-bottom: 1rem;
-      text-align: left;
-    }
-
-    label, select, input[type="color"], input[type="number"] {
-      font-size: 1rem;
-    }
-
-    button {
-      padding: 10px 20px;
-      background-color: #8b4513;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #a0522d;
-    }
-
-    a {
-      display: block;
-      margin-top: 1rem;
-      color: #8b4513;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .volver-inicio {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      padding: 10px 20px;
-      background-color: #8b4513;
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      border-radius: 5px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s;
-    }
-
-    .volver-inicio:hover {
-      background-color: #a0522d;
-    }
-  </style>
 </head>
 <body>
-  <h1>🍫 Personaliza tu chocolate</h1>
-  <p>Escoge tus ingredientes favoritos y crea tu combinación única.</p>
+  <h1>Personaliza tu pedido</h1>
+  <p>Escoge las opciones según el producto que seleccionaste.</p>
   <a href="index.html" class="volver-inicio">Volver al inicio</a>
 
-  <form id="formChocolate">
-    <div>
+  <form id="formProducto">
+    <div id="seccionForma" style="display: none;">
       <label for="forma">Forma del chocolate:</label><br>
       <select id="forma" name="forma">
         <option value="Corazón">Corazón</option>
-        <option value="Estrella">Estrella</option>
-        <option value="Cuadrado">Cuadrado</option>
+        <option value="Oso">Oso (incluye gomitas)</option>
       </select>
     </div>
 
-    <div>
+    <div id="seccionToppings" style="display: none;">
       <p>Toppings:</p>
       <label><input type="checkbox" name="toppings" value="Nueces"> Nueces</label><br>
-      <label><input type="checkbox" name="toppings" value="Gomitas"> Gomitas</label><br>
       <label><input type="checkbox" name="toppings" value="Coco"> Coco</label>
     </div>
 
     <div>
-      <label for="color">Color del chocolate:</label><br>
-      <input type="color" id="color" name="color" value="#6b3e26">
+      <label>Color:</label><br>
+      <label><input type="radio" name="color" value="Rojo"> Rojo</label><br>
+      <label><input type="radio" name="color" value="Café"> Café</label><br>
+      <label><input type="radio" name="color" value="Rosado"> Rosado</label><br>
+      <label><input type="radio" name="color" value="Azul"> Azul</label><br>
+      <label><input type="radio" name="color" value="Blanco"> Blanco</label>
     </div>
 
     <div class="form-group">
@@ -102,30 +40,44 @@
       <input type="number" id="cantidad" name="cantidad" min="1" value="1" max="100">
     </div>
 
-    <button type="submit">Crear chocolate</button>
+    <button type="submit">Crear pedido</button>
   </form>
 
-  <button type="button" id="agregarOtro">Agregar otro chocolate</button>
+  <button type="button" id="agregarOtro">Agregar otro</button>
 
   <script>
-    document.getElementById('agregarOtro').addEventListener('click', function() {
-      document.getElementById('formChocolate').reset(); // Resetea el formulario
+    const form = document.getElementById('formProducto');
+    const params = new URLSearchParams(window.location.search);
+    const producto = params.get('producto') || 'chocolate';
+
+    // Mostrar/ocultar secciones según el producto
+    if (producto === 'chocolate') {
+      document.getElementById('seccionForma').style.display = 'block';
+      document.getElementById('seccionToppings').style.display = 'block';
+    }
+
+    document.getElementById('agregarOtro').addEventListener('click', function () {
+      form.reset();
     });
 
-    const form = document.getElementById('formChocolate');
-
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      const forma = form.forma.value;
+      const forma = producto === 'chocolate' ? form.forma.value : null;
       const color = form.color.value;
       const cantidad = form.cantidad.value;
-      const toppings = Array.from(form.querySelectorAll('input[name="toppings"]:checked')).map(el => el.value);
 
-      const chocolate = { forma, color, cantidad, toppings };
-      localStorage.setItem('miChocolate', JSON.stringify(chocolate));
+      let toppings = [];
+      if (producto === 'chocolate') {
+        toppings = Array.from(form.querySelectorAll('input[name="toppings"]:checked')).map(el => el.value);
+        if (forma === 'Oso' && !toppings.includes('Gomitas')) {
+          toppings.push('Gomitas');
+        }
+      }
 
-      // Redirigir inmediatamente
+      const pedido = { producto, forma, color, cantidad, toppings };
+      localStorage.setItem('miChocolate', JSON.stringify(pedido));
+
       window.location.href = 'resultado.html';
     });
   </script>
