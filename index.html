@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Choco Yiyi - Bienvenido</title>
-  <link rel="icon" href="img/Logo.png" type="image/png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="img/Logo.png" type="image/png" />
+  <link rel="stylesheet" href="styles.css" />
   <style>
     header {
       text-align: center;
-      padding: 1rem 0;
+      padding: 1.5rem 0;
+      background: linear-gradient(135deg, #f8d7e0, #f0a7c5);
+      box-shadow: 0 3px 8px rgba(204,102,136,0.4);
     }
 
     header img.logo {
@@ -21,29 +23,31 @@
 </head>
 <body>
   <header>
-    <img src="img/Logo.png" alt="Logo Choco Yiyi" class="logo">
+    <img src="img/Logo.png" alt="Logo Choco Yiyi" class="logo" />
     <h1>Choco Yiyi</h1>
     <p>¡Elige tu dulce favorito y personalízalo a tu gusto!</p>
   </header>
 
   <main class="contenedor-principal">
     <section class="productos">
+      <center>
       <h2>Productos disponibles</h2>
+    </center>
       <div class="tarjetas-productos">
         <div class="producto">
-          <img src="img/corazon-rojo.png" alt="Chocolate personalizado">
+          <img src="img/corazon-rojo.png" alt="Chocolate personalizado" />
           <h3>Chocolates</h3>
           <p>Personaliza corazones o ositos en varios colores.</p>
           <button onclick="window.location.href='personalizar.html?producto=chocolate'">Personalizar</button>
         </div>
         <div class="producto">
-          <img src="img/donita.png" alt="Donita">
+          <img src="img/donita.png" alt="Donita" />
           <h3>Donitas</h3>
           <p>Elige tu donita favorita y dale tu toque especial.</p>
           <button onclick="window.location.href='personalizar.html?producto=donita'">Personalizar</button>
         </div>
         <div class="producto">
-          <img src="img/oreo.png" alt="Choco Oreo">
+          <img src="img/oreo.png" alt="Choco Oreo" />
           <h3>Choco Oreo</h3>
           <p>Chocolate relleno con Oreo, ¡una delicia crujiente!</p>
           <button onclick="window.location.href='personalizar.html?producto=oreo'">Personalizar</button>

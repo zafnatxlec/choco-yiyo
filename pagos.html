@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pago - Choco Yiyi</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f9e6f1;
+      color: #4a4a4a;
+      margin: 0;
+      padding: 2rem;
+      max-width: 450px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h2 {
+      color: #c94f81;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    form {
+      background-color: #fff0f6;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(201, 79, 129, 0.3);
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    input[type="text"],
+    input[type="email"],
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1.2rem;
+      border: 2px solid #c94f81;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .info-niqui {
+      background-color: #fde4f0;
+      border: 1px solid #c94f81;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      color: #a53563;
+      display: none;
+    }
+    button {
+      background-color: #c94f81;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #a53563;
+    }
+  </style>
+</head>
+<body>
+  <h2>Datos para pago</h2>
+  <form id="form-pago">
+    <label for="nombre">Nombre completo:</label>
+    <input type="text" id="nombre" name="nombre" required />
+
+    <label for="correo">Correo electrónico:</label>
+    <input type="email" id="correo" name="correo" required />
+
+    <label for="numero">Número de teléfono:</label>
+    <input type="text" id="numero" name="numero" required />
+
+    <label for="cedula">Cédula:</label>
+    <input type="text" id="cedula" name="cedula" required />
+
+    <label for="metodoPago">Método de pago:</label>
+    <select id="metodoPago" name="metodoPago" required>
+      <option value="" disabled selected>Selecciona un método</option>
+      <option value="efectivo">Efectivo</option>
+      <option value="digital">Digital (Niqui)</option>
+    </select>
+
+    <div class="info-niqui" id="infoNiqui">
+      <p><strong>Para pago digital:</strong></p>
+      <p>Número Niqui: <strong>+57 322 4278512</strong></p>
+      <p>Envía tu comprobante de pago a este número de WhatsApp.</p>
+      <button type="button" id="btn-whatsapp">Enviar comprobante por WhatsApp</button>
+    </div>
+
+    <button type="submit">Enviar Datos</button>
+  </form>
+
+  <script>
+    const metodoPagoSelect = document.getElementById('metodoPago');
+    const infoNiqui = document.getElementById('infoNiqui');
+    const btnWhatsapp = document.getElementById('btn-whatsapp');
+    const formPago = document.getElementById('form-pago');
+
+    metodoPagoSelect.addEventListener('change', () => {
+      if (metodoPagoSelect.value === 'digital') {
+        infoNiqui.style.display = 'block';
+      } else {
+        infoNiqui.style.display = 'none';
+      }
+    });
+
+    btnWhatsapp.addEventListener('click', () => {
+      const numeroWhatsapp = '+573224278512';
+      const urlWhatsapp = `https://wa.me/${numeroWhatsapp}?text=Hola,%20quiero%20enviar%20mi%20comprobante%20de%20pago%20de%20Choco%20Yiyi.`;
+      window.open(urlWhatsapp, '_blank');
+    });
+
+    formPago.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Datos enviados. ¡Gracias por tu compra!');
+
+      // Aquí podrías agregar código para enviar datos a un servidor o almacenarlos
+
+      // Limpiar localStorage para cantidadChocolate porque la compra ya está hecha
+      localStorage.removeItem('cantidadChocolate');
+
+      // Redirigir al inicio
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

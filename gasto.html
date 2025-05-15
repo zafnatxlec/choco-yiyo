@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resumen de gasto - Choco Yiyi</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f9e6f1;
+      color: #4a4a4a;
+      margin: 0;
+      padding: 2rem;
+      text-align: center;
+    }
+    h2 {
+      color: #c94f81;
+      margin-bottom: 1rem;
+    }
+    .resumen {
+      background-color: #fff0f6;
+      border-radius: 15px;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(201, 79, 129, 0.3);
+    }
+    .resumen div {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    button {
+      background-color: #c94f81;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      margin-top: 2rem;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #a53563;
+    }
+  </style>
+</head>
+<body>
+  <h2>Resumen de tu compra</h2>
+  <div class="resumen">
+    <div><strong>Chocolates personalizados:</strong> <span id="cantidad-chocolates">0</span></div>
+    <div><strong>Costo unitario:</strong> $15,000</div>
+    <div><strong>Total a pagar:</strong> $<span id="total-pagar">0</span></div>
+
+    <button id="btn-ir-pago">Ir a Pago</button>
+  </div>
+
+  <script>
+    const costoUnitarioChocolate = 15000;
+
+    function formatearNumero(num) {
+      return num.toLocaleString('es-CO');
+    }
+
+    // Obtener cantidad del localStorage
+    const cantidad = parseInt(localStorage.getItem('cantidadChocolate')) || 0;
+    document.getElementById('cantidad-chocolates').textContent = cantidad;
+    document.getElementById('total-pagar').textContent = formatearNumero(cantidad * costoUnitarioChocolate);
+
+    // Botón para ir a pago
+    document.getElementById('btn-ir-pago').addEventListener('click', () => {
+      window.location.href = 'pagos.html';
+    });
+  </script>
+</body>
+</html>
