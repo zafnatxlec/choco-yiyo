@@ -139,7 +139,6 @@
       let descripcion = '';
 
       if (producto === 'chocolate') {
-        // Cambié aquí la ruta de la imagen para que coincida con tus archivos
         imgSrc = `img/${forma}-${color}.png`;
         descripcion = `
           Chocolate en forma de <strong>${forma}</strong>, color <strong>${color}</strong>.<br>
@@ -149,13 +148,13 @@
         localStorage.setItem('cantidadChocolate', cantidadChocolate);
 
       } else if (producto === 'donita') {
-        imgSrc = `img/donita-${color}.png`;
+        imgSrc = `img/donita.png`;
         descripcion = `Donita color <strong>${color}</strong>.`;
         cantidadDonita++;
         localStorage.setItem('cantidadDonita', cantidadDonita);
 
       } else if (producto === 'oreo') {
-        imgSrc = `img/oreo-${color}.png`;
+        imgSrc = `img/oreo.png`;
         descripcion = `Choco Oreo color <strong>${color}</strong>.`;
         cantidadOreo++;
         localStorage.setItem('cantidadOreo', cantidadOreo);
