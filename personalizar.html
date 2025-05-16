@@ -12,20 +12,17 @@
       background: linear-gradient(135deg, #f8d7e0, #f0a7c5);
       box-shadow: 0 3px 8px rgba(204,102,136,0.4);
     }
-
     header img.logo {
       height: 100px;
       margin-bottom: 10px;
       transform: scale(0.7);
     }
-
     form label {
       font-weight: 600;
       color: #a04266;
       margin-top: 15px;
       display: block;
     }
-
     select, button {
       padding: 8px;
       margin-top: 5px;
@@ -36,7 +33,6 @@
       font-size: 1rem;
       box-shadow: inset 1px 1px 4px #f6c1d2;
     }
-
     button {
       background: #f295b2;
       border: none;
@@ -46,22 +42,18 @@
       margin-top: 20px;
       transition: background-color 0.3s ease;
     }
-
     button:hover {
       background: #d86b86;
     }
-
     #mensaje {
       margin-top: 1rem;
       font-weight: 600;
       color: #b5476e;
     }
-
     main {
       padding: 2rem;
       text-align: center;
     }
-
     footer {
       text-align: center;
       margin-top: 3rem;
@@ -82,22 +74,24 @@
       <label>Producto seleccionado:</label>
       <p id="productoSeleccionado" style="font-weight:bold; font-size:1.2rem; color:#a04266;"></p>
 
-      <div id="opcionesChocolate" style="display:none;">
-        <label for="forma">Forma:</label>
-        <select id="forma">
-          <option value="" disabled selected>Selecciona forma</option>
-          <option value="corazon">Corazón</option>
-          <option value="oso">Oso</option>
-        </select>
+      <div id="opcionesPersonalizacion" style="display:none;">
+        <div id="campoForma">
+          <label for="forma">Forma:</label>
+          <select id="forma">
+            <option value="" disabled selected>Selecciona forma</option>
+            <option value="corazon">Corazón</option>
+            <option value="oso">Oso</option>
+          </select>
+        </div>
 
-        <label for="colorChocolate">Color:</label>
-        <select id="colorChocolate">
+        <label for="color">Color:</label>
+        <select id="color">
           <option value="" disabled selected>Selecciona color</option>
           <option value="azul">Azul</option>
           <option value="blanco">Blanco</option>
           <option value="cafe">Café</option>
           <option value="rojo">Rojo</option>
-          <option value="rosa">Rosado</option>
+          <option value="rosa">rosa</option> <!-- Este valor se guarda como 'rosa' en el resultado -->
         </select>
 
         <label for="topping">Topping:</label>
@@ -121,18 +115,6 @@
         </select>
       </div>
 
-      <div id="opcionesDonitaOreo" style="display:none;">
-        <label for="colorDonitaOreo">Color:</label>
-        <select id="colorDonitaOreo">
-          <option value="" disabled selected>Selecciona color</option>
-          <option value="azul">Azul</option>
-          <option value="blanco">Blanco</option>
-          <option value="cafe">Café</option>
-          <option value="rojo">Rojo</option>
-          <option value="rosa">Rosado</option>
-        </select>
-      </div>
-
       <div id="mensaje"></div>
 
       <button type="submit">Ver Resultado</button>
@@ -148,11 +130,10 @@
     const producto = urlParams.get('producto');
 
     const productoSeleccionado = document.getElementById('productoSeleccionado');
-    const opcionesChocolate = document.getElementById('opcionesChocolate');
-    const opcionesDonitaOreo = document.getElementById('opcionesDonitaOreo');
+    const opcionesPersonalizacion = document.getElementById('opcionesPersonalizacion');
+    const campoForma = document.getElementById('campoForma');
     const mensaje = document.getElementById('mensaje');
 
-    // Mostrar nombre del producto o mensaje error
     if (producto) {
       productoSeleccionado.textContent = producto.charAt(0).toUpperCase() + producto.slice(1);
     } else {
@@ -160,14 +141,14 @@
       mensaje.textContent = 'No se seleccionó un producto válido.';
     }
 
-    // Mostrar opciones según producto
     if (producto === 'chocolate') {
-      opcionesChocolate.style.display = 'block';
+      opcionesPersonalizacion.style.display = 'block';
+      campoForma.style.display = 'block';
     } else if (producto === 'donita' || producto === 'oreo') {
-      opcionesDonitaOreo.style.display = 'block';
+      opcionesPersonalizacion.style.display = 'block';
+      campoForma.style.display = 'none';
     }
 
-    // Evento submit del formulario
     document.getElementById('formularioPersonalizar').addEventListener('submit', e => {
       e.preventDefault();
 
@@ -182,32 +163,29 @@
 
       if (producto === 'chocolate') {
         forma = document.getElementById('forma').value;
-        color = document.getElementById('colorChocolate').value;
-        topping = document.getElementById('topping').value;
-
-        if (!forma || !color || !topping) {
-          mensaje.textContent = 'Por favor selecciona forma, color y topping.';
-          return;
-        }
-      } else if (producto === 'donita' || producto === 'oreo') {
-        color = document.getElementById('colorDonitaOreo').value;
-
-        if (!color) {
-          mensaje.textContent = 'Por favor selecciona un color.';
-          return;
-        }
       }
 
-      // Guardar datos en localStorage
+      color = document.getElementById('color').value;
+      topping = document.getElementById('topping').value;
+
+      if ((producto === 'chocolate' && (!forma || !color || !topping)) ||
+          ((producto === 'donita' || producto === 'oreo') && (!color || !topping))) {
+        mensaje.textContent = 'Por favor completa todos los campos.';
+        return;
+      }
+
+      // Ajuste: si el color es "rosado", guardar como "rosa"
+      if (color === 'rosado') {
+        color = 'rosa';
+      }
+
       localStorage.setItem('productoSeleccionado', producto);
       localStorage.setItem('formaSeleccionada', forma);
       localStorage.setItem('colorSeleccionado', color);
       localStorage.setItem('toppingSeleccionado', topping);
 
-      // Redirigir a resultado.html
       window.location.href = 'resultado.html';
     });
   </script>
-
 </body>
 </html>

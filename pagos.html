@@ -4,54 +4,49 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pago - Choco Yiyi</title>
-  <link rel="stylesheet" href="styles.css" />
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #f9e6f1;
+      background-color: #fff0f6;
       color: #4a4a4a;
       margin: 0;
       padding: 2rem;
-      max-width: 450px;
-      margin-left: auto;
-      margin-right: auto;
+      text-align: center;
     }
     h2 {
       color: #c94f81;
-      margin-bottom: 1rem;
-      text-align: center;
     }
     form {
-      background-color: #fff0f6;
+      max-width: 600px;
+      margin: 2rem auto;
+      background: white;
       padding: 2rem;
       border-radius: 15px;
       box-shadow: 0 4px 12px rgba(201, 79, 129, 0.3);
     }
     label {
       display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
+      margin-top: 1rem;
+      font-weight: bold;
+      text-align: left;
     }
-    input[type="text"],
-    input[type="email"],
-    select {
+    input {
       width: 100%;
       padding: 10px;
-      margin-bottom: 1.2rem;
-      border: 2px solid #c94f81;
-      border-radius: 8px;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-    .info-niqui {
-      background-color: #fde4f0;
       border: 1px solid #c94f81;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 10px;
-      font-size: 1rem;
-      color: #a53563;
-      display: none;
+      border-radius: 8px;
+      margin-top: 5px;
+    }
+    .resumen {
+      margin-top: 2rem;
+      text-align: left;
+    }
+    .resumen p {
+      margin: 5px 0;
+    }
+    .resaltado {
+      font-weight: bold;
+      color: #a04266;
     }
     button {
       background-color: #c94f81;
@@ -59,79 +54,136 @@
       border: none;
       border-radius: 10px;
       padding: 15px 30px;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
+      margin-top: 1.5rem;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      width: 100%;
     }
     button:hover {
       background-color: #a53563;
     }
+    .mensaje-pago {
+      background: #ffe6ef;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+      color: #8b3a59;
+    }
+    .btn-inicio {
+      margin-top: 2rem;
+      display: inline-block;
+      background-color: #a04266;
+    }
+    .btn-inicio:hover {
+      background-color: #872b50;
+    }
   </style>
 </head>
 <body>
-  <h2>Datos para pago</h2>
+
+  <h2>Finaliza tu pedido</h2>
+
+  <div class="mensaje-pago">
+    <p>Por favor paga el <strong>50%</strong> de tu pedido por <strong>Nequi al número 3224278512</strong>.</p>
+    <p>El resto se paga al entregar 💸</p>
+  </div>
+
   <form id="form-pago">
-    <label for="nombre">Nombre completo:</label>
-    <input type="text" id="nombre" name="nombre" required />
+    <label>Nombre completo:</label>
+    <input type="text" id="nombre" required />
 
-    <label for="correo">Correo electrónico:</label>
-    <input type="email" id="correo" name="correo" required />
+    <label>Cédula:</label>
+    <input type="text" id="cedula" required />
 
-    <label for="numero">Número de teléfono:</label>
-    <input type="text" id="numero" name="numero" required />
+    <label>Dirección:</label>
+    <input type="text" id="direccion" required />
 
-    <label for="cedula">Cédula:</label>
-    <input type="text" id="cedula" name="cedula" required />
+    <label>Ciudad:</label>
+    <input type="text" id="ciudad" required />
 
-    <label for="metodoPago">Método de pago:</label>
-    <select id="metodoPago" name="metodoPago" required>
-      <option value="" disabled selected>Selecciona un método</option>
-      <option value="efectivo">Efectivo</option>
-      <option value="digital">Digital (Niqui)</option>
-    </select>
+    <label>Teléfono / WhatsApp:</label>
+    <input type="text" id="telefono" required />
 
-    <div class="info-niqui" id="infoNiqui">
-      <p><strong>Para pago digital:</strong></p>
-      <p>Número Niqui: <strong>+57 322 4278512</strong></p>
-      <p>Envía tu comprobante de pago a este número de WhatsApp.</p>
-      <button type="button" id="btn-whatsapp">Enviar comprobante por WhatsApp</button>
-    </div>
+    <div class="resumen" id="resumen-pedido"></div>
 
-    <button type="submit">Enviar Datos</button>
+    <button type="submit">Enviar pedido por WhatsApp</button>
   </form>
 
+  <button class="btn-inicio" onclick="window.location.href='index.html'">Volver al inicio</button>
+
   <script>
-    const metodoPagoSelect = document.getElementById('metodoPago');
-    const infoNiqui = document.getElementById('infoNiqui');
-    const btnWhatsapp = document.getElementById('btn-whatsapp');
-    const formPago = document.getElementById('form-pago');
+    const resumenDiv = document.getElementById('resumen-pedido');
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-    metodoPagoSelect.addEventListener('change', () => {
-      if (metodoPagoSelect.value === 'digital') {
-        infoNiqui.style.display = 'block';
+    const precios = {
+      chocolate: { corazon: 7500, oso: 9000 },
+      donita: 2000,
+      oreo: 6000
+    };
+
+    let total = 0;
+    let resumenTexto = '';
+
+    function formatearPrecio(num) {
+      return '$' + num.toLocaleString('es-CO');
+    }
+
+    carrito.forEach(item => {
+      let precioUnit = 0;
+      if (item.producto === 'chocolate') {
+        precioUnit = precios.chocolate[item.forma] || 0;
       } else {
-        infoNiqui.style.display = 'none';
+        precioUnit = precios[item.producto] || 0;
       }
+
+      const subtotal = precioUnit * item.cantidad;
+      total += subtotal;
+
+      const desc = `${item.cantidad} x ${item.producto} ${item.forma || ''} ${item.color} con ${item.topping !== 'ninguna' ? item.topping : 'sin topping'}: ${formatearPrecio(subtotal)}`;
+
+      resumenTexto += `• ${desc}\n`;
+      const p = document.createElement('p');
+      p.innerHTML = desc;
+      resumenDiv.appendChild(p);
     });
 
-    btnWhatsapp.addEventListener('click', () => {
-      const numeroWhatsapp = '+573224278512';
-      const urlWhatsapp = `https://wa.me/${numeroWhatsapp}?text=Hola,%20quiero%20enviar%20mi%20comprobante%20de%20pago%20de%20Choco%20Yiyi.`;
-      window.open(urlWhatsapp, '_blank');
-    });
+    const anticipo = Math.ceil(total / 2);
 
-    formPago.addEventListener('submit', (e) => {
+    const pTotal = document.createElement('p');
+    pTotal.innerHTML = `<br><span class="resaltado">Total: ${formatearPrecio(total)}</span><br>
+                        <span class="resaltado">Anticipo (50%): ${formatearPrecio(anticipo)}</span>`;
+    resumenDiv.appendChild(pTotal);
+
+    document.getElementById('form-pago').addEventListener('submit', function(e) {
       e.preventDefault();
-      alert('Datos enviados. ¡Gracias por tu compra!');
 
-      // Aquí podrías agregar código para enviar datos a un servidor o almacenarlos
+      const nombre = document.getElementById('nombre').value.trim();
+      const cedula = document.getElementById('cedula').value.trim();
+      const direccion = document.getElementById('direccion').value.trim();
+      const ciudad = document.getElementById('ciudad').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
 
-      // Limpiar localStorage para cantidadChocolate porque la compra ya está hecha
-      localStorage.removeItem('cantidadChocolate');
+      const mensaje = 
+`*🧾 Pedido Choco Yiyi:*
 
-      // Redirigir al inicio
-      window.location.href = 'index.html';
+Cliente: ${nombre}
+Cédula: ${cedula}
+Teléfono: ${telefono}
+Ciudad: ${ciudad}
+Dirección: ${direccion}
+
+*Productos:*
+${resumenTexto}
+
+Total: ${formatearPrecio(total)}
+Anticipo (50%): ${formatearPrecio(anticipo)}
+
+✅ *Realiza el pago a Nequi: 3224278512*
+📤 *Envío automático de factura digital*`;
+
+      const numeroWhatsApp = "3224278512";
+      const url = `https://wa.me/57${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
     });
   </script>
 </body>

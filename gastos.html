@@ -77,17 +77,24 @@
       margin-top: 2rem;
       margin-bottom: 2rem;
     }
-    button#vaciar-carrito {
+    .acciones-finales {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 2rem;
+    }
+    .acciones-finales button {
       background-color: #c94f81;
       color: white;
       border: none;
       border-radius: 10px;
-      padding: 12px 30px;
-      font-size: 1.2rem;
+      padding: 12px 24px;
+      font-size: 1.1rem;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    button#vaciar-carrito:hover {
+    .acciones-finales button:hover {
       background-color: #a53563;
     }
   </style>
@@ -97,25 +104,26 @@
   <h2>Resumen de tu compra</h2>
   <div id="carrito-container"></div>
   <div class="total-pagar" id="total-pagar">Total a pagar: $0</div>
-  <button id="vaciar-carrito">Vaciar carrito</button>
+
+  <div class="acciones-finales">
+    <button onclick="vaciarCarrito()">Vaciar carrito</button>
+    <button onclick="window.location.href='pagos.html'">Ir a pagos</button>
+    <button onclick="window.location.href='index.html'">Volver al inicio</button>
+  </div>
 
   <script>
-    // Precios fijos según producto y forma
     const precios = {
       chocolate: { corazon: 7500, oso: 9000 },
       donita: 2000,
       oreo: 6000
     };
 
-    // Leer carrito del localStorage
     let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-    // Función para agrupar productos iguales
     function agruparCarrito(items) {
       const agrupados = [];
 
       items.forEach(item => {
-        // Buscar si ya existe producto igual
         const index = agrupados.findIndex(i =>
           i.producto === item.producto &&
           i.forma === item.forma &&
@@ -126,25 +134,22 @@
         if (index > -1) {
           agrupados[index].cantidad += item.cantidad;
         } else {
-          agrupados.push({...item}); // copia para evitar referencias
+          agrupados.push({...item});
         }
       });
 
       return agrupados;
     }
 
-    // Inicialmente agrupamos carrito
     carrito = agruparCarrito(carrito);
 
     const contenedor = document.getElementById('carrito-container');
     const totalPagarElem = document.getElementById('total-pagar');
 
-    // Función para formatear números (moneda)
     function formatearPrecio(num) {
       return '$' + num.toLocaleString('es-CO');
     }
 
-    // Mostrar carrito en pantalla
     function mostrarCarrito() {
       contenedor.innerHTML = '';
 
@@ -169,7 +174,6 @@
         let subtotal = precioUnitario * item.cantidad;
         total += subtotal;
 
-        // Determinar imagen segun producto
         let imgSrc = '';
         if (item.producto === 'chocolate') {
           imgSrc = `img/${item.forma}-${item.color}.png`;
@@ -181,15 +185,12 @@
           imgSrc = 'img/default.png';
         }
 
-        // Descripción
         const descripcion = `
-          ${item.producto.charAt(0).toUpperCase() + item.producto.slice(1)} 
-          ${item.forma ? 'forma ' + item.forma : ''} 
-          color ${item.color} 
-          con topping ${item.topping !== 'ninguna' ? item.topping : 'sin topping'}
+          ${item.producto.charAt(0).toUpperCase() + item.producto.slice(1)}
+          ${item.forma ? ' forma ' + item.forma : ''}
+          color ${item.color} con ${item.topping !== 'ninguna' ? item.topping : 'sin topping'}
         `;
 
-        // Crear bloque HTML para el producto
         const divItem = document.createElement('div');
         divItem.className = 'carrito-item';
         divItem.innerHTML = `
@@ -208,14 +209,13 @@
 
       totalPagarElem.textContent = 'Total a pagar: ' + formatearPrecio(total);
 
-      // Agregar eventos a botones
       document.querySelectorAll('.btn-restar').forEach(btn => {
         btn.addEventListener('click', e => {
           const i = e.target.getAttribute('data-index');
           if (carrito[i].cantidad > 1) {
             carrito[i].cantidad--;
           } else {
-            carrito.splice(i, 1); // quitar producto si cantidad = 0
+            carrito.splice(i, 1);
           }
           actualizarLocalStorage();
           mostrarCarrito();
@@ -236,14 +236,13 @@
       localStorage.setItem('carrito', JSON.stringify(carrito));
     }
 
-    // Vaciar carrito
-    document.getElementById('vaciar-carrito').addEventListener('click', () => {
-      if (confirm('¿Quieres vaciar el carrito?')) {
+    function vaciarCarrito() {
+      if (confirm('¿Estás seguro de que deseas vaciar el carrito?')) {
         carrito = [];
         actualizarLocalStorage();
         mostrarCarrito();
       }
-    });
+    }
 
     mostrarCarrito();
   </script>
