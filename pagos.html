@@ -30,7 +30,7 @@
       font-weight: bold;
       text-align: left;
     }
-    input {
+    input, select {
       width: 100%;
       padding: 10px;
       border: 1px solid #c94f81;
@@ -62,12 +62,13 @@
     button:hover {
       background-color: #a53563;
     }
-    .mensaje-pago {
+    .mensaje {
       background: #ffe6ef;
       padding: 1rem;
       border-radius: 10px;
       margin-top: 1rem;
       color: #8b3a59;
+      display: none;
     }
     .btn-inicio {
       margin-top: 2rem;
@@ -82,11 +83,6 @@
 <body>
 
   <h2>Finaliza tu pedido</h2>
-
-  <div class="mensaje-pago">
-    <p>Por favor paga el <strong>50%</strong> de tu pedido por <strong>Nequi al número 3224278512</strong>.</p>
-    <p>El resto se paga al entregar 💸</p>
-  </div>
 
   <form id="form-pago">
     <label>Nombre completo:</label>
@@ -104,6 +100,24 @@
     <label>Teléfono / WhatsApp:</label>
     <input type="text" id="telefono" required />
 
+    <label>Método de pago:</label>
+    <select id="metodo-pago" required>
+      <option value="" disabled selected>Selecciona método</option>
+      <option value="nequi">Nequi</option>
+      <option value="efectivo">Efectivo</option>
+    </select>
+
+    <div class="mensaje" id="mensaje-nequi">
+      <p><strong>Por favor paga el 50%</strong> de tu pedido por <strong>Nequi al número 3224278512</strong>.</p>
+      <p>El resto se paga al entregar 💸</p>
+    </div>
+
+    <div class="mensaje" id="mensaje-efectivo">
+      <p><strong>Paga al recibir</strong>.</p>
+      <p>Dirección de entrega: <strong>25#4-46</strong></p>
+      <p>Contacto: <strong>3224278512</strong></p>
+    </div>
+
     <div class="resumen" id="resumen-pedido"></div>
 
     <button type="submit">Enviar pedido por WhatsApp</button>
@@ -114,6 +128,9 @@
   <script>
     const resumenDiv = document.getElementById('resumen-pedido');
     const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const metodoPagoSelect = document.getElementById('metodo-pago');
+    const mensajeNequi = document.getElementById('mensaje-nequi');
+    const mensajeEfectivo = document.getElementById('mensaje-efectivo');
 
     const precios = {
       chocolate: { corazon: 7500, oso: 9000 },
@@ -148,11 +165,16 @@
     });
 
     const anticipo = Math.ceil(total / 2);
-
     const pTotal = document.createElement('p');
     pTotal.innerHTML = `<br><span class="resaltado">Total: ${formatearPrecio(total)}</span><br>
                         <span class="resaltado">Anticipo (50%): ${formatearPrecio(anticipo)}</span>`;
     resumenDiv.appendChild(pTotal);
+
+    metodoPagoSelect.addEventListener('change', () => {
+      const metodo = metodoPagoSelect.value;
+      mensajeNequi.style.display = metodo === 'nequi' ? 'block' : 'none';
+      mensajeEfectivo.style.display = metodo === 'efectivo' ? 'block' : 'none';
+    });
 
     document.getElementById('form-pago').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -162,6 +184,21 @@
       const direccion = document.getElementById('direccion').value.trim();
       const ciudad = document.getElementById('ciudad').value.trim();
       const telefono = document.getElementById('telefono').value.trim();
+      const metodo = metodoPagoSelect.value;
+
+      let pagoTexto = '';
+      if (metodo === 'nequi') {
+        pagoTexto = `
+Total: ${formatearPrecio(total)}
+Anticipo (50%): ${formatearPrecio(anticipo)}
+✅ *Realiza el pago a Nequi: 3224278512*`;
+      } else {
+        pagoTexto = `
+Total a pagar: ${formatearPrecio(total)}
+🧾 Pago en efectivo al recibir.
+📍 Dirección: 25#4-46
+📞 Contacto: 3224278512`;
+      }
 
       const mensaje = 
 `*🧾 Pedido Choco Yiyi:*
@@ -174,11 +211,8 @@ Dirección: ${direccion}
 
 *Productos:*
 ${resumenTexto}
+${pagoTexto}
 
-Total: ${formatearPrecio(total)}
-Anticipo (50%): ${formatearPrecio(anticipo)}
-
-✅ *Realiza el pago a Nequi: 3224278512*
 📤 *Envío automático de factura digital*`;
 
       const numeroWhatsApp = "3224278512";
